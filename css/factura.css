@@ -1,0 +1,53 @@
+/* -----------  HEADER  ---------- */
+header{
+    display: flex; 
+    justify-content: space-between; 
+    border-bottom: 1px solid black; 
+    padding-bottom: 15px; 
+}
+
+header h1{
+    color: lightskyblue; 
+}
+
+header img{
+    width: 60px; 
+    height: 80px;
+}
+
+header a{
+    text-decoration: none; 
+    color: #ceaece; 
+    font-weight: bold;
+    margin-top: 30px; 
+}
+
+
+
+/* ------------  MAIN  ----------- */
+main div{
+    margin-top: 40px;
+    border: 1px solid black; 
+    width: 500px; 
+    margin-bottom: 20px;
+}
+
+main input{
+    margin-bottom: 40px;
+}
+
+
+
+/* -----------  FOOTER  ---------- */
+footer{
+    display: flex; 
+    justify-content: center;
+    padding-top: 15px;  
+    border-top: 1px solid black;
+    height: 60px; 
+}
+
+.iconos{
+    width: 20px; 
+    height: auto;
+}
