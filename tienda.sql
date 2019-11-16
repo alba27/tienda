@@ -9,14 +9,15 @@ grant all on tienda.* to tienda;
 CREATE TABLE producto (
   id int primary key not null,
   nombre VARCHAR(75),
-  precio float not null
+  precio float not null, 
+  imagen text
 ) engine =innodb;
 
-INSERT INTO producto VALUES (1,'Vestido',34.99);
-INSERT INTO producto VALUES (2,'Cardigan',24.99);
-INSERT INTO producto VALUES (3,'Vestido nina',12.95);
-INSERT INTO producto VALUES (4,'Botines',49.99);
-INSERT INTO producto VALUES (5,'Collar',8.99);
+INSERT INTO producto VALUES (1,'Vestido',34.99,'./img/vestido.png');
+INSERT INTO producto VALUES (2,'Cardigan',24.99,'./img/chaqueta.png');
+INSERT INTO producto VALUES (3,'Vestido nina',12.95,'./img/vestido2.png');
+INSERT INTO producto VALUES (4,'Botines',49.99,'./img/botines.png');
+INSERT INTO producto VALUES (5,'Collar',8.99,'./img/collar.png');
 --
 
 
@@ -49,5 +50,3 @@ CREATE TABLE compra (
 
 
 
-
---auto_increment

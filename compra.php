@@ -1,7 +1,25 @@
 <?php
 
+//Comprobación del usuario  
+if (isset($_POST['usu'])){
+    $usu=strip_tags(trim($_POST['usu']));
+}
+
+//Comprobación de la contraseña
+if (isset($_POST['con'])){
+    $con=strip_tags(trim($_POST['con']));
+}
+
+if (empty($usu) or empty($con)){
+	$http = "Location: tienda.php?mensaje=".urlencode("Datos incorrectos"); 
+    header($http); 
+    exit; 
+}
+
+
+
 //Accede a la base de datos 
-include "../../seguridad/tema04/datosTienda.php";
+include "../../../seguridad/tema04/datosTienda.php";
 $canal=@mysqli_connect(IP,USUARIO,CLAVE,BD);
 if (!$canal){
 	echo "Ha ocurrido el error: ".mysqli_connect_errno()." ".mysqli_connect_error()."<br />";
@@ -12,7 +30,7 @@ if (!$canal){
 mysqli_set_charset($canal,"utf8");
 
 //Hacemos la consulta 
-$sql="select email,contrasena from usuario where email=?";
+$sql="select email,contrasena from usuario where email=? and contrasena=?";
 
 //Busca la secuencia sql en la BBDD
 $consulta=mysqli_prepare($canal,$sql); 
@@ -24,7 +42,7 @@ if (!$consulta){
 }
 
 //Le pasa el valor introducido por el usuario a la consulta
-mysqli_stmt_bind_param($consulta,"s",$usu);
+mysqli_stmt_bind_param($consulta,"ss",$usu,$con);
 
 //Ejecuta la sentencia
 mysqli_stmt_execute($consulta);
@@ -32,38 +50,16 @@ mysqli_stmt_execute($consulta);
 //Mete los datos de la consulta ejecutada en la siguientes variables 
 mysqli_stmt_bind_result($consulta, $usuario, $contrasena);
 
+mysqli_stmt_store_result($consulta);
 
-
-
-//Comprobación del usuario  
-if (isset($_POST['usuario'])){
-    $usu=strip_tags($_POST['usuario']);
+$n=mysqli_stmt_num_rows($consulta);
+if ($n!=1){
+	$http="Location: tienda.php?mensaje=".urlencode("Datos incorrectos");
+	header($http);
+	exit;
 }
 
-if (empty($usu)){
-	header("Location: tienda.php?mensaje=".urlencode("Se necesita un nombre de usuario")); 
-    exit; 
-}
-
-if($usu != $usuario) {
-    header("Location: tienda.php?mensaje=".urlencode("El usuario no es correcto")); 
-    exit; 
-}
-
-//Comprobación de la contraseña
-if (isset($_POST['contrasena'])){
-    $con=strip_tags($_POST['contrasena']);
-}
-
-if (empty($con)){
-	header("Location: tienda.php?mensaje=".urlencode("Se necesita una contraseña")); 
-    exit; 
-}
-
-if($con != $contrasena) {
-    header("Location: tienda.php?mensaje=".urlencode("La contraseña no es correcta")); 
-    exit; 
-}
+mysqli_stmt_close($consulta);
 
 ?>
 
@@ -88,48 +84,36 @@ if($con != $contrasena) {
     <!-- *****  Contenido principal  ***** -->
     <main>
         <table>
-            <thead>
-                <tr>
-                    <th>Nombre producto</th>
-                    <th>Imagen</th>
-                    <th>Precio</th>
-                    <th>Cantidad</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Vestido</td>
-                    <td><img src="img/peq/vestido.png"></td>
-                    <td>34.99€</td>
-                    <td><input type="number" value="0"></td>
-                </tr>
-                <tr>
-                    <td>Cárdigan</td>
-                    <td><img src="img/peq/chaqueta.png"></td>
-                    <td>24.99€</td>
-                    <td><input type="number" value="0"></td>
-                </tr>
-                <tr>
-                    <td>Vestido niña</td>
-                    <td><img src="img/peq/vestido2.jpg"></td>
-                    <td>12.95€</td>
-                    <td><input type="number" value="0"></td>
-                </tr>
-                <tr>
-                    <td>Botines</td>
-                    <td><img src="img/peq/botines.png"></td>
-                    <td>49.99€</td>
-                    <td><input type="number" value="0"></td>
-                </tr>
-                <tr>
-                    <td>Collar</td>
-                    <td><img src="img/collar.png"></td>
-                    <td>8.99€</td>
-                    <td><input type="number" value="0" size="10"></td>
-                </tr>
-            </tbody>
-        </table>
-        <input type="submit" value="Añadir al carrito"/>
+            <tr>
+                <th>NOMBRE</th><th>IMAGEN</th><th>PRECIO</th><th>CANTIDAD</th>
+            </tr>
+            
+            <?php
+               			       
+                //Generamos la consulta
+                $sql="select nombre,imagen,precio from producto";
+                $consulta=mysqli_prepare($canal,$sql);
+                if (!$consulta){
+                    echo "Ha ocurrido el error: ".mysqli_errno($canal)." ".mysqli_error($canal)."<br />";
+                    exit;
+                }            
+            
+                mysqli_stmt_execute($consulta);
+                mysqli_stmt_bind_result($consulta,$nombre,$imagen,$precio);
+            
+            
+                while(mysqli_stmt_fetch($consulta)){
+                    echo "<tr><td>$nombre</td><td><img src='$imagen'></td><td>$precio</td></td><td><input type='number'/></td></tr>";
+                }
+                //Deja de buscar en la base de datos
+                mysqli_stmt_close($consulta);
+                //Cierra la base de datos
+                mysqli_close($canal); 
+        ?>
+	   </table>
+       <form action="factura.php">
+           <input type="submit" value="Añadir al carrito"/>
+       </form>
     </main>
     <!-- *****  Pie de página  ***** -->
     <footer>

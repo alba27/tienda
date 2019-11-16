@@ -2,18 +2,18 @@
 
 $mensaje="";
 if (isset($_GET['mensaje'])){
-    $mensaje=strip_tags($_GET['mensaje']);
+    $mensaje=strip_tags(trim($_GET['mensaje']));
 }
 
 /* Comprobación del usuario */
 $usu="";
-if(isset($_GET['usuario'])){
-    $usu=strip_tags($_GET['usuario']);
+if(isset($_GET['usu'])){
+    $usu=strip_tags(trim($_GET['usu']));
 }
 /* Comprobación de la contraseña */
 $con="";
-if(isset($_GET['contrasena'])){
-    $con=strip_tags($_GET['contrasena']);
+if(isset($_GET['con'])){
+    $con=strip_tags(trim($_GET['con']));
 }
 
 ?>
@@ -35,17 +35,17 @@ if(isset($_GET['contrasena'])){
         <h1>R&amp;C</h1>
         <p><?=$mensaje?></p>
         <form action="compra.php" method="post">
-            <label>Usuario:</label><input type="text" name="usuario" size="15" maxlength="24" value="<?=$usu?>"/>
-            <label>Contraseña:</label><input type="password" name="contrasena" size="15" maxlength="24" value="<?=$con?>"/>
+            <label>Usuario:</label><input type="text" name="usu" size="15" maxlength="24" value="<?=$usu?>"/>
+            <label>Contraseña:</label><input type="password" name="con" size="15" maxlength="24" value="<?=$con?>"/>
             <input type="submit" value="Acceder"/>
         </form>
     </header>
     <!-- *****  Contenido principal  ***** -->
     <main>
         <p>Últimas novedades</p>
-        <img src="img/vestido.png" class="imagenes" id="img1"> 
-        <img src="img/chaqueta.png" class="imagenes">
-        <img src="img/vestido2.png" class="imagenes" id="img2">
+        <img src="img/grandes/vestido.png" class="imagenes" id="img1"> 
+        <img src="img/grandes/chaqueta.png" class="imagenes">
+        <img src="img/grandes/vestido2.png" class="imagenes" id="img2">
     </main>
     <!-- *****  Pie de página  ***** -->
     <footer>
